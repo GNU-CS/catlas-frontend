@@ -10,6 +10,18 @@ CATLAS 프론트엔드 개발 시 유의해야 할 사항을 정리하는 문서
 
 작업해야하는 사항이 생기면 그에 대한 이슈를 생성한 후, `이슈태그#이슈번호`의 형태를 가진 이름의 브랜치를 생성하여 작업합니다. 해당 브랜치가 문제없음이 확인되면 `dev` 브랜치에 합쳐집니다.
 
+## 2. 개발 환경 설정
+
+```
+Node.js가 설치되어 있어야 합니다:
+
+git clone https://github.com/GNU-CS/catlas-frontend     # GitHub에서 저장소 clone해오기
+cd catlas-frontend                                      # 저장소로 들어가기
+cd catlas                                               # 프로젝트 경로로 들어가기
+npm update                                              # 의존성 설치하기
+git switch dev                                          # git branch 변경하기
+```
+
 ---
 
 *나머지 필요한 사항은 추후 작업됩니다.*

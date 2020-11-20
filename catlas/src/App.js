@@ -13,9 +13,12 @@ import {
   Talks
 } from "./pages";
 
+import Theme from "./component/theme";
+
 function App() {
   return (
     <BrowserRouter>
+      <Theme />
       <Switch>
         <Route exact path="/">
           <Main />

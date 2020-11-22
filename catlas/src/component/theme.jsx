@@ -1,5 +1,5 @@
 import React from "react";
-import { Grid, Image, Menu } from "semantic-ui-react";
+import { Container, Grid, Image, Menu } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 
 import bgimg from "../assets/img/catlas-logo.png";
@@ -8,7 +8,9 @@ function Theme() {
     return (
         <Grid container columns={1} verticalAlign='middle' padded='vertically'>
             <Grid.Column>
-                <Image src={bgimg} centered size='huge'></Image>
+                <Container as={Link} to=''>
+                    <Image src={bgimg} centered size='huge'></Image>
+                </Container>
             </Grid.Column>
             <Grid.Column>
                 <Menu pointing widths={6} stackable>

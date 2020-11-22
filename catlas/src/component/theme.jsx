@@ -2,13 +2,13 @@ import React from "react";
 import { Grid, Image, Menu } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 
-import bgimg from "../assets/img/bgimg-temp.png";
+import bgimg from "../assets/img/catlas-logo.png";
 
 function Theme() {
     return (
         <Grid container columns={1} verticalAlign='middle' padded='vertically'>
             <Grid.Column>
-                <Image src={bgimg}></Image>
+                <Image src={bgimg} centered size='huge'></Image>
             </Grid.Column>
             <Grid.Column>
                 <Menu pointing widths={6} stackable>

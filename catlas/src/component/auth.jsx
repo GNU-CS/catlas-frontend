@@ -25,7 +25,7 @@ function Auth(props) {
     }
     
     const [values, setValues] = useState({
-        id: '',
+        account: '',
         password: ''
     });
 
@@ -34,11 +34,15 @@ function Auth(props) {
     }
 
     const handleSubmit = () => {
-        const submitId = values.id;
-        const submitPw = values.password;
+        const submitAccount = values.account;
+        const submitPassword = values.password;
 
-        console.log(submitId);
-        console.log(submitPw);
+        const data = {
+            account: submitAccount,
+            password: submitPassword
+        }
+
+        // REST를 이용해 백엔드와 통신
 
         props.onClose();
     }

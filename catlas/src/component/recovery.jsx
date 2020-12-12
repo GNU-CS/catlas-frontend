@@ -11,7 +11,11 @@ function Recovery(props) {
     const handleSubmit = () => {
         const submitMail = mail;
 
-        console.log(submitMail);
+        const data = {
+            mail: submitMail
+        }
+
+        // REST를 이용해 백엔드와 통신
 
         props.onClose();
     }

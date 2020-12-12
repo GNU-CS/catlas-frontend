@@ -3,7 +3,7 @@ import { Button, Form, Modal } from "semantic-ui-react";
 
 function Register(props) {
     const [values, setValues] = useState({
-        id: '',
+        account: '',
         mail: '',
         password: ''
     });
@@ -13,13 +13,17 @@ function Register(props) {
     }
 
     const handleSubmit = () => {
-        const submitId = values.id;
+        const submitAccount = values.account;
         const submitMail = values.mail;
-        const submitPw = values.password;
+        const submitPassword = values.password;
 
-        console.log(submitId);
-        console.log(submitMail);
-        console.log(submitPw);
+        const data = {
+            account: submitAccount,
+            mail: submitMail,
+            password: submitPassword
+        }
+
+        // REST를 이용해 백엔드와 통신
 
         props.onClose();
     }

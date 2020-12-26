@@ -37,35 +37,37 @@ function ClubCardGruop() {
 
 	const __URL = 'test_url';
 	React.useEffect(() => {
-		//초기 랜더링 넘어가기
+		//초j기 랜더링 넘어가기
 		if (initialRender.current) {
 			initialRender.current = false;
 
-			fetch(__URL, {
-				method: 'GET',
-				headers: {
-					'Content-type': 'application/json',
-				},
-			})
-				.then((data) => {
-					setClubs(data);
+			if (process.env.REACT_APP_MODE === 'dev') {
+				setClubs([
+					{
+						name: '구석방',
+						chairman: '고영민',
+						phone: '010-0000-0001',
+						description: '여타 잡무',
+					},
+					{
+						name: '런앤건',
+						chairman: '아무개',
+						phone: '010-0000-0002',
+						description: '농구',
+					},
+				]);
+			} else if (process.env.REACT_APP_MODE === 'test') {
+				fetch(__URL, {
+					method: 'GET',
+					headers: {
+						'Content-type': 'application/json',
+					},
 				})
-				.catch((err) => {
-					setClubs([
-						{
-							name: '구석방',
-							chairman: '고영민',
-							phone: '010-0000-0001',
-							description: '여타 잡무',
-						},
-						{
-							name: '런앤건',
-							chairman: '아무개',
-							phone: '010-0000-0002',
-							description: '농구',
-						},
-					]);
-				});
+					.then((data) => {
+						setClubs(data);
+					})
+					.catch((err) => {});
+			}
 			return;
 		}
 	}, [clubs, prevClubs]);

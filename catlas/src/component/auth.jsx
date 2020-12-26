@@ -4,6 +4,8 @@ import { Button, Form, Modal } from "semantic-ui-react";
 import Register from './register';
 import Recovery from './recovery';
 
+import { send } from './request';
+
 // Needs to be refactored
 
 function Auth(props) {
@@ -25,7 +27,7 @@ function Auth(props) {
     }
     
     const [values, setValues] = useState({
-        account: '',
+        username: '',
         password: ''
     });
 
@@ -34,15 +36,17 @@ function Auth(props) {
     }
 
     const handleSubmit = () => {
-        const submitAccount = values.account;
+        const submitUsername = values.username;
         const submitPassword = values.password;
 
         const data = {
-            account: submitAccount,
+            username: submitUsername,
             password: submitPassword
         }
 
         // REST를 이용해 백엔드와 통신
+
+        send(data, '/auth/login/', 'post');
 
         props.onClose();
     }
@@ -51,7 +55,7 @@ function Auth(props) {
         <>
             <Modal as={Form} onSubmit={() => handleSubmit()} size='tiny' open={props.open} onClose={() => props.onClose()}>
                 <Modal.Content>
-                    <Form.Input icon='user' iconPosition='left' placeholder='아이디' name='id' onChange={handleChange} />
+                    <Form.Input icon='user' iconPosition='left' placeholder='아이디' name='username' onChange={handleChange} />
                     <Form.Input icon='lock' iconPosition='left' placeholder='비밀번호' type='password' name='password' onChange={handleChange} />
                 </Modal.Content>
                 <Modal.Actions>

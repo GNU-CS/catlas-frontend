@@ -47,6 +47,7 @@ function Article(params) {
 					width: '100%',
 					height: '50px',
 					fontWeight: 'bold',
+					borderBottom: '1px solid #E9E9E9',
 				}}
 			>
 				제목
@@ -110,6 +111,13 @@ function Article(params) {
 					onClick={(e) => handleSilde(e)}
 				/>
 			</div>
+			<div
+				className='discription'
+				style={{
+					width: '100%',
+					borderTop: '1px solid #E9E9E9',
+				}}
+			></div>
 		</div>
 	);
 }

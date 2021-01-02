@@ -13,9 +13,9 @@ export function send(submitData, apiPath, reqMethod) {
 
     axios(config)
     .then((response) => {
-        console.log(response);
+        return response;
     })
     .catch((error) => {
-        console.error(error);
+        return error;
     });
 }

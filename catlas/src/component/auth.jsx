@@ -1,14 +1,19 @@
 import React, { useState } from "react";
 import { Button, Form, Modal } from "semantic-ui-react";
+import { useDispatch } from "react-redux";
+
+import { loginAction } from "../redux/modules/auth";
 
 import Register from './register';
 import Recovery from './recovery';
 
-import { send } from './request';
+// import { send } from './request';
 
 // Needs to be refactored
 
 function Auth(props) {
+    const dispatch = useDispatch();
+
     const [showRegister, setShowRegister] = useState(false);
     const [showRecovery, setShowRecovery] = useState(false);
 
@@ -46,7 +51,7 @@ function Auth(props) {
 
         // REST를 이용해 백엔드와 통신
 
-        send(data, '/auth/login/', 'post');
+        dispatch(loginAction(data));
 
         props.onClose();
     }

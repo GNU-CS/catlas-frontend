@@ -5,16 +5,17 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import 'semantic-ui-css/semantic.min.css';
 
-import { createStore } from "redux";
 import { Provider } from "react-redux";
-import rootReducer from "./redux/modules";
+import { PersistGate } from 'redux-persist/integration/react';
 
-const store = createStore(rootReducer);
+import { store, persistor } from "./redux/configureStore";
 
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <App />
+      <PersistGate persistor={persistor}>
+        <App />
+      </PersistGate>
     </Provider>
   </React.StrictMode>,
   document.getElementById('root')

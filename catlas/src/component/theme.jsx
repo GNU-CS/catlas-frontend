@@ -11,6 +11,7 @@ import bgimg from "../assets/img/catlas-logo.png";
 function Theme() {
     const dispatch = useDispatch();
     const isLoggedIn = useSelector(state => state.auth.isLoggedIn);
+    const token = useSelector(state => state.auth.token);
 
     const [showAuth, setShowAuth] = useState(false);
 
@@ -20,7 +21,7 @@ function Theme() {
     }
 
     const clickedAuth = () => {
-        if (isLoggedIn) dispatch(logoutAction());
+        if (isLoggedIn) dispatch(logoutAction(token));
         else setShowAuth(true);
     }
 

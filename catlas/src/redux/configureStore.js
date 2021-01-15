@@ -5,8 +5,8 @@ import { composeWithDevTools } from "redux-devtools-extension";
 
 import rootReducer from "./modules";
 
-export const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(ReduxThunk)));
+const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(ReduxThunk)));
 
-export const persistor = persistStore(store);
+const persistor = persistStore(store);
 
-export default { store, persistor };
+export { store, persistor };

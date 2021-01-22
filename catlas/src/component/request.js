@@ -1,21 +1,11 @@
 import axios from 'axios';
 
-export function send(submitData, apiPath, reqMethod) {
+export const createInstance = () => {
     const base = 'http://127.0.0.1:8000/api/';
+    const timeout = 1000;
 
-    const config = {
-        url: apiPath,
-        method: reqMethod,
+    return axios.create({
         baseURL: base,
-        data: submitData,
-        timeout: 1000
-    };
-
-    axios(config)
-    .then((response) => {
-        return response;
-    })
-    .catch((error) => {
-        return error;
+        timeout: timeout
     });
 }

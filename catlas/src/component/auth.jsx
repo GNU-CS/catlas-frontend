@@ -1,5 +1,8 @@
 import React, { useState } from "react";
-import { Button, Form, Modal } from "semantic-ui-react";
+import { Button, Form, Header, Message, Modal } from "semantic-ui-react";
+import { useDispatch, useSelector } from "react-redux";
+
+import { loginAction } from "../redux/modules/auth";
 
 import Register from './register';
 import Recovery from './recovery';
@@ -7,8 +10,17 @@ import Recovery from './recovery';
 // Needs to be refactored
 
 function Auth(props) {
+    const dispatch = useDispatch();
+    const isLoggedIn = useSelector(state => state.auth.isLoggedIn);
+
     const [showRegister, setShowRegister] = useState(false);
     const [showRecovery, setShowRecovery] = useState(false);
+    const [showError, setShowError] = useState(false);
+    
+    const [values, setValues] = useState({
+        username: '',
+        password: ''
+    });
 
     const openModal = e => {
         if (e.target.name === 'register') setShowRegister(true);
@@ -23,36 +35,40 @@ function Auth(props) {
     const closeRecovery = () => {
         setShowRecovery(false);
     }
-    
-    const [values, setValues] = useState({
-        account: '',
-        password: ''
-    });
 
     const handleChange = e => {
         setValues({...values, [e.target.name]: e.target.value});
     }
 
     const handleSubmit = () => {
-        const submitAccount = values.account;
+        setShowError(false);
+
+        const submitUsername = values.username;
         const submitPassword = values.password;
 
         const data = {
-            account: submitAccount,
+            username: submitUsername,
             password: submitPassword
         }
 
         // REST를 이용해 백엔드와 통신
 
-        props.onClose();
+        dispatch(loginAction(data))
+        .then(() => {
+            if (!isLoggedIn) setShowError(true);
+            else props.onClose();
+        });
     }
 
     return (
         <>
             <Modal as={Form} onSubmit={() => handleSubmit()} size='tiny' open={props.open} onClose={() => props.onClose()}>
                 <Modal.Content>
-                    <Form.Input icon='user' iconPosition='left' placeholder='아이디' name='id' onChange={handleChange} />
+                    <Form.Input icon='user' iconPosition='left' placeholder='아이디' name='username' onChange={handleChange} />
                     <Form.Input icon='lock' iconPosition='left' placeholder='비밀번호' type='password' name='password' onChange={handleChange} />
+                    <Message negative hidden={!showError}>
+                        <Message.Header as={Header} textAlign='center'>입력하신 정보가 올바르지 않습니다!</Message.Header>
+                    </Message>
                 </Modal.Content>
                 <Modal.Actions>
                     <Button.Group floated='left'>

@@ -1,24 +1,13 @@
-import React, { useState } from "react";
+import React from "react";
 import { Container, Grid, Image, Menu } from "semantic-ui-react";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
-import Auth from './auth';
+import { logout } from '../redux/modules/auth';
 
 import bgimg from "../assets/img/catlas-logo.png";
 
 function Theme() {
-    const [isLoggedIn, setLoggedIn] = useState(false);
-    const [showAuth, setShowAuth] = useState(false);
-
-    const authMenu = () => {
-        if (isLoggedIn) return '로그아웃'
-        else return '로그인'
-    }
-
-    const closeAuth = () => {
-        setShowAuth(false);
-    }
-
     return (
         <>
             <Grid container columns={1} verticalAlign='middle' padded='vertically'>
@@ -35,13 +24,27 @@ function Theme() {
                         <Menu.Item as={Link} to='links' name='links'>바로가기</Menu.Item>
                         <Menu.Item href='https://github.com/GNU-CS/catlas-frontend/issues' name='admin'>관리자에게</Menu.Item>
                         <Menu.Item as={Link} to='scenes' name='scenes'>사진첩</Menu.Item>
-                        <Menu.Item name='auth' onClick={() => setShowAuth(true)}>{authMenu()}</Menu.Item>
+                        <Auth />
                     </Menu>
                 </Grid.Column>
             </Grid>
-            <Auth open={showAuth} onClose={closeAuth}/>
+            
         </>
     );
+}
+
+function Auth() {
+    const dispatch = useDispatch();
+    const isLoggedIn = useSelector(state => state.auth.isLoggedIn);
+    const token = useSelector(state => state.auth.token);
+
+    if (isLoggedIn) {
+        return (<Menu.Item name='auth' onClick={() => dispatch(logout(token))}>로그아웃</Menu.Item>);
+    }
+
+    else {
+        return (<Menu.Item as={Link} to='login' name='auth'>로그인</Menu.Item>);
+    }
 }
 
 export default Theme;

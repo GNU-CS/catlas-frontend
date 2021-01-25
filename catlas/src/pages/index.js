@@ -4,12 +4,8 @@ import About from './About';
 import Talks from './Talks';
 import Links from './Links';
 import Scenes from './Scenes';
+import Login from './Login';
+import Register from './Register';
+import Reset from './Reset';
 
-export {
-    Main,
-    Clubs,
-    About,
-    Talks,
-    Links,
-    Scenes
-}
+export { Main, Clubs, About, Talks, Links, Scenes, Login, Register, Reset };

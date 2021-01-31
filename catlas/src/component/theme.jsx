@@ -27,8 +27,7 @@ function Theme() {
                         <Auth />
                     </Menu>
                 </Grid.Column>
-            </Grid>
-            
+            </Grid>           
         </>
     );
 }

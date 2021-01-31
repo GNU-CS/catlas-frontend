@@ -9,7 +9,7 @@ import github from "../assets/img/github.png";
 function Links() {
     return (
         <Container>
-            <Segment raised padded='very'>
+            <Segment padded='very'>
                 <LinkItems />
             </Segment>
         </Container>

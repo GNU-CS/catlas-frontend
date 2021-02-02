@@ -18,12 +18,12 @@ function Theme() {
                 </Grid.Column>
                 <Grid.Column>
                     <Menu widths={7} stackable>
-                        <Menu.Item as={Link} to='clubs' name='clubs'>동아리</Menu.Item>
-                        <Menu.Item as={Link} to='about' name='about'>집부</Menu.Item>
-                        <Menu.Item as={Link} to='talks' name='talks'>자유게시판</Menu.Item>
-                        <Menu.Item as={Link} to='links' name='links'>바로가기</Menu.Item>
+                        <Menu.Item as={Link} to='/clubs' name='clubs'>동아리</Menu.Item>
+                        <Menu.Item as={Link} to='/about' name='about'>집부</Menu.Item>
+                        <Menu.Item as={Link} to='/talks' name='talks'>자유게시판</Menu.Item>
+                        <Menu.Item as={Link} to='/links' name='links'>바로가기</Menu.Item>
                         <Menu.Item href='https://github.com/GNU-CS/catlas-frontend/issues' name='admin'>관리자에게</Menu.Item>
-                        <Menu.Item as={Link} to='scenes' name='scenes'>사진첩</Menu.Item>
+                        <Menu.Item as={Link} to='/scenes' name='scenes'>사진첩</Menu.Item>
                         <Auth />
                     </Menu>
                 </Grid.Column>
@@ -42,7 +42,7 @@ function Auth() {
     }
 
     else {
-        return (<Menu.Item as={Link} to='login' name='auth'>로그인</Menu.Item>);
+        return (<Menu.Item as={Link} to='auth' name='auth'>로그인</Menu.Item>);
     }
 }
 

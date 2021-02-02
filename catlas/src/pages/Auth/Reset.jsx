@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { Button, Form, Grid, Header, Icon, Segment } from "semantic-ui-react";
 
-import { createInstance } from "../component/request";
+import { createInstance } from "../../component/request";
 
 const schema = Joi.string().alphanum().required();
 

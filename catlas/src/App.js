@@ -1,43 +1,25 @@
 import React from "react";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
-import { Main, Clubs, About, Links, Talks, Scenes, Login, Register, Reset } from "./pages";
+import { Main, Clubs, About, Links } from "./pages";
 
 import Theme from "./component/theme";
 
-// apply nested routing
+import Talks from "./pages/Talks";
+import Auth from "./pages/Auth";
+import Scenes from "./pages/Scenes";
 
 function App() {
   return (
     <BrowserRouter>
       <Theme />
       <Switch>
-        <Route exact path="/">
-          <Main />
-        </Route>
-        <Route path="/clubs">
-          <Clubs />
-        </Route>
-        <Route path="/about">
-          <About />
-        </Route>
-        <Route path="/talks">
-          <Talks />
-        </Route>
-        <Route path="/links">
-          <Links />
-        </Route>
-        <Route path="/scenes">
-          <Scenes />
-        </Route>
-        <Route path="/login">
-          <Login />
-        </Route>
-        <Route path="/register">
-          <Register />
-        </Route>
-        <Route path="/reset">
-          <Reset />
-        </Route>
+        <Route exact path="/" component={Main} />
+        <Route path="/clubs" component={Clubs} />
+        <Route path="/about" component={About} />
+        <Route path="/talks" component={Talks} />
+        <Route path="/links" component={Links} />
+        <Route path="/scenes" component={Scenes} />
+        <Route path="/auth" component={Auth} />
       </Switch>
     </BrowserRouter>
   );

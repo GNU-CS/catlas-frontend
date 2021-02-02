@@ -1,6 +1,6 @@
 import React from "react";
 
-function Scenes() {
+function Album() {
     return (
         <>
         <h2>Scenes</h2>
@@ -8,4 +8,4 @@ function Scenes() {
     );
 }
 
-export default Scenes;
+export default Album;

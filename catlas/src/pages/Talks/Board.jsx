@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Button, Container, Dropdown, Grid, Input, Item, Pagination, Segment } from "semantic-ui-react";
 
-function Talks() {
+function Board() {
     const searchOptions = [
         { key: 'title', text: '제목', value: 'title' },
         { key: 'author', text: '글쓴이', value: 'author' }
@@ -65,4 +65,4 @@ function Post(props) {
     );
 }
 
-export default Talks;
+export default Board;

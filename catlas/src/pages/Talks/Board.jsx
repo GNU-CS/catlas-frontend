@@ -1,8 +1,10 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useRouteMatch } from "react-router-dom";
 import { Button, Container, Dropdown, Grid, Input, Item, Pagination, Segment } from "semantic-ui-react";
 
 function Board() {
+    const { url } = useRouteMatch();
+
     const searchOptions = [
         { key: 'title', text: '제목', value: 'title' },
         { key: 'author', text: '글쓴이', value: 'author' }
@@ -25,7 +27,7 @@ function Board() {
                             action={<Button primary>검색</Button>}
                             actionPosition='right'
                         />
-                        <Button icon='write' content='글쓰기' />
+                        <Button as={Link} to={`${url}/new`} icon='write' content='글쓰기' />
                     </Grid.Row>
                 </Grid>
             </Segment>

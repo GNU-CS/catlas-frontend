@@ -42,7 +42,7 @@ function Auth() {
     }
 
     else {
-        return (<Menu.Item as={Link} to='auth' name='auth'>로그인</Menu.Item>);
+        return (<Menu.Item as={Link} to='/auth' name='auth'>로그인</Menu.Item>);
     }
 }
 

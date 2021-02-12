@@ -13,7 +13,6 @@ const schema = Joi.object({
     password: Joi.string().alphanum().required()
 });
 
-// How to show register/reset
 function Login() {
     const { url } = useRouteMatch();
 
@@ -34,8 +33,8 @@ function Login() {
     });
 
     const handleChange = (_, { name, value }) => setData({ ...data, [name]: value });
-
-    // Apply schema description library
+    
+    // Refactor with try-catch statement
     const handleSubmit = async () => {
         setError(false);
 
@@ -77,11 +76,11 @@ function Login() {
                     </Form>
                     <Divider />
                     <Button.Group fluid>
-                        <Button as={Link} to={`${url}/register`} onClick={() => console.log(`${url}/register`)} name='register'>
+                        <Button as={Link} to={`${url}/register`} name='register'>
                             회원가입
                         </Button>
                         <Button.Or />
-                        <Button as={Link} to={`${url}/reset`} onClick={() => console.log(`${url}/reset`)} name='reset'>
+                        <Button as={Link} to={`${url}/reset`} name='reset'>
                             비밀번호 재설정
                         </Button>
                     </Button.Group>

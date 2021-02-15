@@ -1,10 +1,9 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import { Link, useRouteMatch } from "react-router-dom";
-import { Button, Container, Dropdown, Grid, Input, Item, Pagination, Segment } from "semantic-ui-react";
+import { Button, Container, Dropdown, Grid, Input, Item, Pagination, Popup, Segment } from "semantic-ui-react";
 
 function Board() {
-    const { url } = useRouteMatch();
-
     const searchOptions = [
         { key: 'title', text: '제목', value: 'title' },
         { key: 'author', text: '글쓴이', value: 'author' }
@@ -28,7 +27,7 @@ function Board() {
                         />
                     </Grid.Row>
                     <Grid.Row centered>
-                        <Button positive as={Link} to={`${url}/new`} icon='write' content='글쓰기' />
+                        <LoginButton />
                     </Grid.Row>
                 </Grid>
             </Segment>
@@ -66,6 +65,14 @@ function Post(props) {
             </Item.Content>
         </Item>
     );
+}
+
+function LoginButton() {
+    const { url } = useRouteMatch();
+    const isLoggedIn = useSelector(state => state.auth.isLoggedIn);
+
+    if (isLoggedIn) return <Button positive as={Link} to={`${url}/new`} icon='write' content='글쓰기' />;
+    else return <Popup content='로그인 후에 가능합니다!' position='top center' trigger={<Button negative icon='write' content='글쓰기' />} />;
 }
 
 export default Board;

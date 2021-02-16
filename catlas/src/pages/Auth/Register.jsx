@@ -36,7 +36,7 @@ function Register() {
 
         const success = await dispatch(register(data));
 
-        if (success) history.replace("/login");
+        if (success) history.replace("/auth");
         else setError(true);
     }
 

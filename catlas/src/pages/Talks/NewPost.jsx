@@ -45,8 +45,9 @@ function NewPost() {
     const [content, setContent] = useState('');
     const [submit, setSubmit] = useState(false);
 
-    const loading = useSelector(state => state.post.loading);
     const errorCode = useSelector(state => state.post.errorCode);
+    const loading = useSelector(state => state.post.loading);
+    const token = useSelector(state => state.auth.token);
 
     const handleTitleChange = (_, data) => {
         setTitle(data.value);
@@ -60,9 +61,10 @@ function NewPost() {
     }
 
     const handleConfirm = async () => {
-        const data = { title: title, content: content };
+        // replace username when bug#42 is fixed
+        const data = { username: 'user1', title: title, content: content };
 
-        const success = await dispatch(post(data));
+        const success = await dispatch(post(data, token));
 
         console.log(errorCode);
 

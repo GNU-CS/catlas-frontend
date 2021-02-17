@@ -35,13 +35,13 @@ export default function reducer(state = initialState, action) {
     }
 }
 
-export const post = data => async dispatch => {
+export const post = (data, token) => async dispatch => {
     dispatch({ type: POST });
 
     try {
-        const instance = createInstance();
+        const instance = createInstance(token);
 
-        await instance.post('upload/post/', data);
+        await instance.post('post/write/', data);
 
         dispatch(postSuccess());
 

@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import SunEditor from "suneditor-react";
 import "suneditor/dist/css/suneditor.min.css";
 
-import { post } from "../../redux/modules/post";
+import { write } from "../../redux/modules/post";
 
 const PLACEHOLDER_MESSAGES = [
     "자유게시판을 이용하실 때의 주의사항!",
@@ -64,7 +64,7 @@ function NewPost() {
         // replace username when bug#42 is fixed
         const data = { username: 'user1', title: title, content: content };
 
-        const success = await dispatch(post(data, token));
+        const success = await dispatch(write(data, token));
 
         console.log(errorCode);
 

@@ -2,9 +2,9 @@ import { createInstance } from "../../component/request";
 
 // Ducks pattern
 
-const POST = "catlas/upload/POST";
-const POST_SUCCEEDED = "catlas/upload/POST_SUCCEEDED";
-const POST_FAILED = "catlas/upload/POST_FAILED";
+const WRITE = "catlas/post/WRITE";
+const WRITE_SUCCEEDED = "catlas/post/WRITE_SUCCEEDED";
+const WRITE_FAILED = "catlas/post/WRITE_FAILED";
 
 const initialState = {
     loading: false,
@@ -13,18 +13,18 @@ const initialState = {
 
 export default function reducer(state = initialState, action) {
     switch (action.type) {
-        case POST:
+        case WRITE:
             return {
                 ...state,
                 loading: true,
                 errorCode: ''
             };
-        case POST_SUCCEEDED:
+        case WRITE_SUCCEEDED:
             return {
                 ...state,
                 loading: false
             };
-        case POST_FAILED:
+        case WRITE_FAILED:
             return {
                 ...state,
                 loading: false,
@@ -35,39 +35,39 @@ export default function reducer(state = initialState, action) {
     }
 }
 
-export const post = (data, token) => async dispatch => {
-    dispatch({ type: POST });
+export const write = (data, token) => async dispatch => {
+    dispatch({ type: WRITE });
 
     try {
         const instance = createInstance(token);
 
         await instance.post('post/write/', data);
 
-        dispatch(postSuccess());
+        dispatch(writeSuccess());
 
         return true;
 
     } catch (error) {
-        dispatch(postFail(error));
+        dispatch(writeFail(error));
 
         return false;
     }
 }
 
-const postSuccess = () => {
+const writeSuccess = () => {
     return {
-        type: POST_SUCCEEDED
+        type: WRITE_SUCCEEDED
     }
 }
 
-const postFail = error => {
+const writeFail = error => {
     let code = '';
 
     if (error.code === 'ECONNABORTED') code = error.code; // axios request timeout
     else code = error.response.status;
 
     return {
-        type: POST_FAILED,
+        type: WRITE_FAILED,
         code: code
     }
 }

@@ -16,6 +16,7 @@ const initialState = {
     loading: false,
     isLoggedIn: false,
     token: "",
+    user: {},
     error: false,
     errorCode: ""
 };
@@ -34,6 +35,7 @@ export default function reducer(state = initialState, action) {
                 ...state,
                 loading: false,
                 isLoggedIn: true,
+                user: action.user,
                 token: action.token
             };
         case LOGIN_FAILED:
@@ -75,7 +77,7 @@ export const login = data => async dispatch => {
 
         const response = await instance.post('/auth/login/', data);
 
-        dispatch(loginSuccess(response.data.token));
+        dispatch(loginSuccess(response.data));
 
         return true;
 
@@ -86,10 +88,11 @@ export const login = data => async dispatch => {
     }
 }
 
-const loginSuccess = token => {
+const loginSuccess = data => {
     return {
         type: LOGIN_SUCCEEDED,
-        token: token
+        token: data.token,
+        user: data.user
     }
 }
 

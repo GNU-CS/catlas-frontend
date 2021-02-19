@@ -7,7 +7,8 @@ const REGISTER_SUCCEEDED = "catlas/register/REGISTER_SUCCEEDED";
 const REGISTER_FAILED = "catlas/register/REGISTER_FAILED";
 
 const initialState = {
-    loading: false
+    loading: false,
+    errorCode: ''
 };
 
 export default function reducer(state = initialState, action) {
@@ -15,7 +16,8 @@ export default function reducer(state = initialState, action) {
         case REGISTER:
             return {
                 ...state,
-                loading: true
+                loading: true,
+                errorCode: ''
             };
         case REGISTER_SUCCEEDED:
             return {
@@ -25,7 +27,8 @@ export default function reducer(state = initialState, action) {
         case REGISTER_FAILED:
             return {
                 ...state,
-                loading: false
+                loading: false,
+                errorCode: action.code
             };
         default:
             return state;
@@ -58,9 +61,14 @@ const registerSuccess = () => {
 }
 
 const registerFail = error => {
-    console.log(error);
+    let errorCode = '';
+    
+    // axios request timeout
+    if (error.code === 'ECONNABORTED') errorCode = error.code
+    else errorCode = error.response.status;
 
     return {
-        type: REGISTER_FAILED
+        type: REGISTER_FAILED,
+        code: errorCode
     }
 }

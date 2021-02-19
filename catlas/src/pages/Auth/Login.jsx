@@ -13,19 +13,22 @@ const schema = Joi.object({
     password: Joi.string().alphanum().required()
 });
 
+const errorMessage = code => code === 'ECONNABORTED' ? '서버와 통신할 수 없습니다!' : '입력한 정보로 로그인할 수 없습니다!';
+
 function Login() {
     const { url } = useRouteMatch();
 
     const dispatch = useDispatch();
     const history = useHistory();
 
-    const loading = useSelector(state => state.auth.loading);
     const errorCode = useSelector(state => state.auth.errorCode);
+    const loading = useSelector(state => state.auth.loading);
+    const user = useSelector(state => state.auth.user);
 
+    const [success, setSuccess] = useState(false);
     const [error, setError] = useState(false);
+    const [requestSent, setRequestSent] = useState(false);
     const [submit, setSubmit] = useState(false);
-
-    const [errMsg, setErrMsg] = useState('');
 
     const [data, setData] = useState({
         username: "",
@@ -33,27 +36,30 @@ function Login() {
     });
 
     const handleChange = (_, { name, value }) => setData({ ...data, [name]: value });
-    
-    // Refactor with try-catch statement
+
     const handleSubmit = async () => {
         setError(false);
+        setRequestSent(false);
 
-        const success = await dispatch(login(data));
+        setSuccess(await dispatch(login(data)));
 
-        if (success) history.replace("/");
-        else {
-            setError(true);
-            
-            switch (errorCode) {
-                case 'ECONNABORTED':
-                    setErrMsg('서버와 통신할 수 없습니다!');
-                    break;
-                default:
-                    setErrMsg('입력한 정보로 로그인할 수 없습니다!');
-            }
-        }
+        setRequestSent(true);
     }
 
+    // Redirect to Main when accessed to /auth with user object
+    useEffect(() => {
+        if (user) history.replace("/");
+    });
+
+    // Show error message
+    useEffect(() => {
+        if (requestSent) {
+            if (success) history.replace("/");
+            else setError(true);
+        }
+    }, [requestSent, success, history]);
+
+    // Enable/Disable submit button
     useEffect(() => {
         const result = schema.validate(data);
 
@@ -87,7 +93,7 @@ function Login() {
                 </Segment>
                 <Message negative hidden={!error}>
                     <Icon name='exclamation triangle' />
-                    {errMsg}
+                    {errorMessage(errorCode)}
                 </Message>
             </Grid.Column>
         </Grid>

@@ -2,8 +2,6 @@ import { createInstance } from "../../component/request";
 
 // Ducks pattern
 
-// Implememt when error happened
-
 const LOGIN = "catlas/auth/LOGIN";
 const LOGIN_SUCCEEDED = "catlas/auth/LOGIN_SUCCESS";
 const LOGIN_FAILED = "catlas/auth/LOGIN_FAILED";
@@ -15,10 +13,9 @@ const LOGOUT_FAILED = "catlas/auth/LOGOUT_FAILED";
 const initialState = {
     loading: false,
     isLoggedIn: false,
-    token: "",
-    user: {},
-    error: false,
-    errorCode: ""
+    token: '',
+    user: undefined,
+    errorCode: ''
 };
 
 export default function reducer(state = initialState, action) {
@@ -27,7 +24,6 @@ export default function reducer(state = initialState, action) {
             return {
                 ...state,
                 loading: true,
-                error: false,
                 errorCode: ''
             };
         case LOGIN_SUCCEEDED:
@@ -42,27 +38,27 @@ export default function reducer(state = initialState, action) {
             return {
                 ...state,
                 loading: false,
-                error: true,
                 errorCode: action.code
             };
         case LOGOUT:
             return {
                 ...state,
                 loading: true,
-                error: false
+                errorCode: ''
             };
         case LOGOUT_SUCCEEDED:
             return {
                 ...state,
                 loading: false,
                 isLoggedIn: false,
-                token: ""
+                user: undefined,
+                token: ''
             };
         case LOGOUT_FAILED:
             return {
                 ...state,
                 loading: false,
-                error: true
+                errorCode: action.code
             };
         default:
             return state;
@@ -97,14 +93,15 @@ const loginSuccess = data => {
 }
 
 const loginFail = error => {
-    let code = '';
-
-    if (error.code === 'ECONNABORTED') code = error.code; // axios request timeout
-    else code = error.response.status;
+    let errorCode = '';
+    
+    // axios request timeout
+    if (error.code === 'ECONNABORTED') errorCode = error.code
+    else errorCode = error.response.status;
 
     return {
         type: LOGIN_FAILED,
-        code: code
+        code: errorCode
     }
 }
 
@@ -137,9 +134,14 @@ const logoutSuccess = () => {
 }
 
 const logoutFail = error => {
-    console.log(error);
+    let errorCode = '';
+    
+    // axios request timeout
+    if (error.code === 'ECONNABORTED') errorCode = error.code
+    else errorCode = error.response.status;
 
     return {
-        type: LOGOUT_FAILED
+        type: LOGOUT_FAILED,
+        code: errorCode
     }
 }

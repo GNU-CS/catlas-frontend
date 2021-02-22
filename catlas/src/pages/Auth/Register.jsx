@@ -8,6 +8,8 @@ import { Button, Form, Grid, Header, Icon, Message, Segment } from "semantic-ui-
 // internal component
 import { register } from "../../redux/modules/register";
 
+const errorMessage = code => code === 'ECONNABORTED' ? '서버와 통신할 수 없습니다!' : '입력한 정보로 가입할 수 없습니다!';
+
 const schema = Joi.object({
     username: Joi.string().alphanum().required(),
     password: Joi.string().required(),
@@ -18,10 +20,15 @@ function Register() {
     const dispatch = useDispatch();
     const history = useHistory();
 
-    const loading = useSelector(state => state.auth.loading);
+    const errorCode = useSelector(state => state.register.errorCode);
+    const loading = useSelector(state => state.register.loading);
+    
+    const user = useSelector(state => state.auth.user);
 
     const [error, setError] = useState(false);
+    const [requestSent, setRequestSent] = useState(false);
     const [submit, setSubmit] = useState(false);
+    const [success, setSuccess] = useState(false);
 
     const [data, setData] = useState({
         username: "",
@@ -33,13 +40,27 @@ function Register() {
     
     const handleSubmit = async () => {
         setError(false);
+        setRequestSent(false);
 
-        const success = await dispatch(register(data));
+        setSuccess(await dispatch(register(data)));
 
-        if (success) history.replace("/auth");
-        else setError(true);
+        setRequestSent(true);
     }
 
+    // Redirect to Main when accessed to /auth with user object
+    useEffect(() => {
+        if (user) history.replace("/");
+    });
+
+    // Show error message
+    useEffect(() => {
+        if (requestSent) {
+            if (success) history.replace("/");
+            else setError(true);
+        }
+    }, [requestSent, success, history, errorCode]);
+
+    // Enable/Disable submit button
     useEffect(() => {
         const result = schema.validate(data);
 
@@ -64,7 +85,7 @@ function Register() {
                 </Segment>
                 <Message negative hidden={!error}>
                     <Icon name='exclamation triangle' />
-                    입력하신 정보로 가입하지 못했습니다!
+                    {errorMessage(errorCode)}
                 </Message>
             </Grid.Column>
         </Grid>

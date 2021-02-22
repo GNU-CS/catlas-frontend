@@ -1,11 +1,11 @@
 import React from "react";
 
-function Talks() {
+function Album() {
     return (
         <>
-        <h2>Talks</h2>
+        <h2>Scenes</h2>
         </>
     );
 }
 
-export default Talks;
+export default Album;

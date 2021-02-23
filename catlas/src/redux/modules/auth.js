@@ -1,6 +1,8 @@
 import { createInstance } from "../../component/request";
 import { createActionType } from "../helper";
 
+// Ducks pattern
+
 const state = "auth";
 
 const LOGIN = createActionType(state, "LOGIN");

@@ -1,9 +1,18 @@
-import React from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useRouteMatch } from "react-router-dom";
-import { Button, Container, Dropdown, Grid, Input, Item, Pagination, Popup, Segment } from "semantic-ui-react";
+import { Button, Container, Dropdown, Grid, Input, Item, Message, Pagination, Popup, Segment } from "semantic-ui-react";
+
+import { list } from "../../redux/modules/post";
 
 function Board() {
+    const dispatch = useDispatch();
+    const loading = useSelector(state => state.post.loading);
+
+    useEffect(() => {
+        dispatch(list());
+    }, [dispatch]);
+    
     const searchOptions = [
         { key: 'title', text: '제목', value: 'title' },
         { key: 'author', text: '글쓴이', value: 'author' }
@@ -11,7 +20,7 @@ function Board() {
 
     return (
         <Container>
-            <Segment padded>
+            <Segment padded loading={loading}>
                 <Grid>
                     <Grid.Column width={16}>
                         <PostList />
@@ -36,32 +45,41 @@ function Board() {
 }
 
 function PostList() {
-    const elements = [
-        { id: 1, title: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus id rhoncus magna, at lobortis leo. Curabitur finibus sit amet mi a venenatis. Maecenas ac ipsum eu arcu vulputate posuere. Nunc ut cursus velit. Suspendisse a ornare massa. Aliquam nibh metus, efficitur et dapibus a, hendrerit ac enim.', date: '2021-01-27' },
-        { id: 2, title: 'Donec sit amet ipsum vitae lectus finibus sollicitudin eget eget sapien.', date: '2021-01-27' },
-        { id: 3, title: 'Nunc rutrum mollis libero, et iaculis velit molestie nec. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nullam dignissim elit vel erat scelerisque, sed aliquet risus iaculis. Praesent odio enim, convallis eget dui id, auctor sodales lectus. Vestibulum non nunc ut augue iaculis molestie.', date: '2021-01-27' },
-        { id: 4, title: 'Suspendisse tempus nunc varius magna imperdiet, quis commodo mauris lacinia.', date: '2021-01-27' },
-        { id: 5, title: 'Cras tincidunt odio sit amet tellus tempor, nec fringilla dolor dignissim.', date: '2021-01-27' }
-    ];
+    const errorCode = useSelector(state => state.post.errorCode);
+    const posts = useSelector(state => state.post.list);
 
-    return (
-        <Item.Group divided>
-            {
-                elements.map((value, _) => {
-                    return <Post key={value.id} title={value.title} date={value.date} />
-                })
-            }
-        </Item.Group>
+    if (errorCode === '') {
+        return (
+            <Item.Group divided>
+                {
+                    posts.map((value, _) => {
+                        return <Post key={value.id} title={value.title} date={value.date_created} username={value.username} />
+                    })
+                }
+            </Item.Group>
+        )
+    }
+
+    else return (
+        <Message negative content={'게시글을 불러올 수 없습니다!'} />
     )
 }
 
 function Post(props) {
+    const formatDate = date => {
+        const date_created = new Date(date);
+        const today = new Date();
+
+        if (today.toDateString() === date_created.toDateString()) return date_created.toLocaleTimeString();
+        else return date_created.toLocaleDateString();
+    }
+
     return (
         <Item>
             <Item.Content>
                 <Item.Header as={Link} to='#'>{props.title}</Item.Header>
-                <Item.Description>글쓴이</Item.Description>
-                <Item.Extra>{props.date}</Item.Extra>
+                <Item.Description>{props.username}</Item.Description>
+                <Item.Extra>{formatDate(props.date)}</Item.Extra>
             </Item.Content>
         </Item>
     );

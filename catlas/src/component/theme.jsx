@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Container, Grid, Image, Menu } from "semantic-ui-react";
-import { Link } from "react-router-dom";
+import { Link, useHistory, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
-import { logout } from '../redux/modules/auth';
+import { check, logout } from '../redux/modules/auth';
 
 import bgimg from "../assets/img/catlas-logo.png";
 
@@ -27,18 +27,35 @@ function Theme() {
                         <Auth />
                     </Menu>
                 </Grid.Column>
-            </Grid>           
+            </Grid>
         </>
     );
 }
 
 function Auth() {
     const dispatch = useDispatch();
+    const history = useHistory();
+    const location = useLocation();
+
     const isLoggedIn = useSelector(state => state.auth.isLoggedIn);
     const token = useSelector(state => state.auth.token);
 
+    useEffect(() => {
+        const onLocationChange = async () => {
+            await dispatch(check(token));
+        }
+
+        onLocationChange();
+    }, [dispatch, location, token]);
+
+    const handleLogout = async () => {
+        history.replace('/');
+
+        await dispatch(logout(token));
+    }
+
     if (isLoggedIn) {
-        return (<Menu.Item name='auth' onClick={() => dispatch(logout(token))}>로그아웃</Menu.Item>);
+        return (<Menu.Item name='auth' onClick={handleLogout}>로그아웃</Menu.Item>);
     }
 
     else {

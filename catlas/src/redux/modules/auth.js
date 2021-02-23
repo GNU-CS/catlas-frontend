@@ -1,72 +1,96 @@
 import { createInstance } from "../../component/request";
+import { createActionType } from "../helper";
 
-// Ducks pattern
+const state = "auth";
 
-const LOGIN = "catlas/auth/LOGIN";
-const LOGIN_SUCCEEDED = "catlas/auth/LOGIN_SUCCESS";
-const LOGIN_FAILED = "catlas/auth/LOGIN_FAILED";
-
-const LOGOUT = "catlas/auth/LOGOUT";
-const LOGOUT_SUCCEEDED = "catlas/auth/LOGOUT_SUCCESS";
-const LOGOUT_FAILED = "catlas/auth/LOGOUT_FAILED";
+const LOGIN = createActionType(state, "LOGIN");
+const LOGOUT = createActionType(state, "LOGOUT");
+const CHECK = createActionType(state, "CHECK");
 
 const initialState = {
     loading: false,
     isLoggedIn: false,
-    token: '',
+    token: undefined,
     user: undefined,
     errorCode: ''
 };
 
 export default function reducer(state = initialState, action) {
     switch (action.type) {
-        case LOGIN:
+
+        // LOGIN
+        case LOGIN.START:
             return {
                 ...state,
                 loading: true,
                 errorCode: ''
             };
-        case LOGIN_SUCCEEDED:
+        case LOGIN.SUCCESS:
             return {
                 ...state,
                 loading: false,
                 isLoggedIn: true,
-                user: action.user,
-                token: action.token
+                token: action.token,
+                user: action.user
             };
-        case LOGIN_FAILED:
+        case LOGIN.FAIL:
             return {
                 ...state,
                 loading: false,
                 errorCode: action.code
             };
-        case LOGOUT:
+
+        // LOGOUT
+        case LOGOUT.START:
             return {
                 ...state,
                 loading: true,
                 errorCode: ''
             };
-        case LOGOUT_SUCCEEDED:
+        case LOGOUT.SUCCESS:
             return {
                 ...state,
                 loading: false,
                 isLoggedIn: false,
-                user: undefined,
-                token: ''
+                token: undefined,
+                user: undefined
             };
-        case LOGOUT_FAILED:
+        case LOGOUT.FAIL:
             return {
                 ...state,
                 loading: false,
                 errorCode: action.code
             };
+
+        // CHECK
+        case CHECK.START:
+            return {
+                ...state,
+                loading: true,
+                errorCode: ''
+            };
+        case CHECK.SUCCESS:
+            return {
+                ...state,
+                loading: false
+            }
+        case CHECK.FAIL:
+            return {
+                ...state,
+                loading: false,
+                isLoggedIn: false,
+                token: undefined,
+                user: undefined,
+                errorCode: action.code
+            }
+
         default:
             return state;
     }
 }
 
 export const login = data => async dispatch => {
-    dispatch({ type: LOGIN });
+    dispatch({ type: LOGIN.START });
 
     try {
         const instance = createInstance();
@@ -86,7 +110,7 @@ export const login = data => async dispatch => {
 
 const loginSuccess = data => {
     return {
-        type: LOGIN_SUCCEEDED,
+        type: LOGIN.SUCCESS,
         token: data.token,
         user: data.user
     }
@@ -94,25 +118,23 @@ const loginSuccess = data => {
 
 const loginFail = error => {
     let errorCode = '';
-    
+
     // axios request timeout
     if (error.code === 'ECONNABORTED') errorCode = error.code
     else errorCode = error.response.status;
 
     return {
-        type: LOGIN_FAILED,
+        type: LOGIN.FAIL,
         code: errorCode
     }
 }
 
 export const logout = token => async dispatch => {
-    dispatch({ type: LOGOUT });
+    dispatch({ type: LOGOUT.START });
 
     try {
 
-        const instance = createInstance();
-
-        instance.defaults.headers.common['Authorization'] = 'token ' + token;
+        const instance = createInstance(token);
 
         await instance.post('/auth/logout/');
 
@@ -129,19 +151,58 @@ export const logout = token => async dispatch => {
 
 const logoutSuccess = () => {
     return {
-        type: LOGOUT_SUCCEEDED
+        type: LOGOUT.SUCCESS
     }
 }
 
 const logoutFail = error => {
     let errorCode = '';
-    
+
     // axios request timeout
     if (error.code === 'ECONNABORTED') errorCode = error.code
     else errorCode = error.response.status;
 
     return {
-        type: LOGOUT_FAILED,
+        type: LOGOUT.FAIL,
+        code: errorCode
+    }
+}
+
+export const check = token => async dispatch => {
+    dispatch({ type: CHECK.START });
+
+    try {
+        const instance = createInstance(token);
+
+        await instance.post('/auth/check/');
+
+        dispatch(checkSuccess());
+
+        return true;
+    }
+
+    catch (error) {
+        dispatch(checkFail(error));
+
+        return false;
+    }
+}
+
+const checkSuccess = () => {
+    return {
+        type: CHECK.SUCCESS
+    }
+}
+
+const checkFail = error => {
+    let errorCode = '';
+
+    // axios request timeout
+    if (error.code === 'ECONNABORTED') errorCode = error.code
+    else errorCode = error.response.status;
+
+    return {
+        type: CHECK.FAIL,
         code: errorCode
     }
 }
